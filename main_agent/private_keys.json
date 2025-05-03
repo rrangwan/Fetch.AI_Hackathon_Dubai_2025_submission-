@@ -1,0 +1,14 @@
+{
+    "my_first_agent": {
+        "identity_key": "6b60ba3ce69e19962b74207552377983b6888145f3bec07994c3e1d61582140b",
+        "wallet_key": "0TTNPHtU0NVJtxTpqSMZ+DxXECFk9j8aLGLQrBn8glo="
+    },
+    "Tester.AI": {
+        "identity_key": "ca5536f6b3fdae1918574e3085fd42970cab839aff0e71db60f66009ced2498a",
+        "wallet_key": "XT1p/rz6BnLDrKp3o6NgkFNBqp8ee9QhKZlRLaKYWOE="
+    },
+    "OpenAI.Agent": {
+        "identity_key": "62b752ec1467687730972a8ad4a477cafa8c7bf41552f146f1a9cd775a47555e",
+        "wallet_key": "jN49iVBnGpsYk8dvrmxlO4KPlX4AoG13PeIlDbQSz4Y="
+    }
+}
