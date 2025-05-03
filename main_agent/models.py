@@ -20,3 +20,6 @@ class InfluencerPaymentResponse(Model):
     link: str = None
     error: str = None
     
+class Payment(Model):
+    uid: str
+    text: str
