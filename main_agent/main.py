@@ -1,5 +1,6 @@
 import uuid
 from database import DatabaseConnection
+from main_agent.waver import waver_generate_sound
 from request_fabric import make_celebrity_request, make_ethical_request
 from uagents import Agent, Context
 from uagents.setup import fund_agent_if_low
@@ -10,6 +11,11 @@ from asi1 import asi1_send_request
 database = DatabaseConnection()
 agent = Agent(name="Influencer.AI", seed=SEED, endpoint="http://localhost:8000/submit")
 fund_agent_if_low(agent.wallet.address())
+
+@agent.on_event("shutdown")
+async def shutdown(ctx: Context):
+    ctx.logger.info("Shutting down the agent.")
+    
 
 @agent.on_message(InfluencerTTSRequest)
 async def check_ethics(ctx: Context, sender: str, message: InfluencerTTSRequest):
@@ -67,18 +73,27 @@ async def check_payment(ctx: Context, sender: str, message: InfluencerPaymentReq
         return
 
     context, response_schema = make_celebrity_request()
-    result = ""
+    generatedText = ""
+    uid = message.uid
 
     try:
-        result = asi1_send_request(context=context, prompt=text, response_schema=response_schema)
+        generatedText = asi1_send_request(context=context, prompt=text, response_schema=response_schema)
     except Exception as e:
         ctx.logger.error(f"Error while sending request to ASI1: {e}")
         await ctx.send(sender, InfluencerPaymentResponse(error="500 Internal server error."))
         return
 
-    # DatabaseConnection.remove_payment(ctx, message.uid)
+    DatabaseConnection.remove_payment(ctx, uid)
 
-    await ctx.send(sender, InfluencerPaymentResponse(link=result))
+    sound_link = None
+    try:
+        sound_link = waver_generate_sound(generatedText)
+    except Exception as e:
+        ctx.logger.error(f"Error while sending generate sound request: {e}")
+        await ctx.send(sender, InfluencerPaymentResponse(error="500 Internal server error."))
+        return
+
+    await ctx.send(sender, InfluencerPaymentResponse(link=sound_link))
 
 if __name__ == "__main__":
     agent.run()

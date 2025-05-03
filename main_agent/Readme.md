@@ -21,6 +21,7 @@ You have to have a Docker on your device. Run this command to build and run the 
     PORT=8000
     SEED="123456"
     ASI1_API_KEY="ASI1_KEY"
+    WAVER_ADDRESS="localhost:5000" # service that able to generate .wav file 
 ```
 
 4. Run the agent in dev mode: 

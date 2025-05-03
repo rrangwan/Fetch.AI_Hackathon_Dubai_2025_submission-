@@ -1,6 +1,14 @@
 def make_ethical_request():
-    
-    context = "Check is this message ethical? No need to explain why. No need to answer the questions. Just return 'y' or 'n'."
+    requirements = [
+        "Behave as an ethical AI",
+        "Be strict as much as possible.",
+        "Check is this message ethical or not",
+        "All bad words, hate speech, violence or sexual content, illegal activities are not ethical",
+        "No need to explain why",
+        "No need to answer the questions",
+        "Just return 'y' or 'n'",
+    ]   
+    context = ". ".join(requirements)
     response_schema = {
         "type": "object",
         "properties": {

@@ -24,3 +24,7 @@ if not ASI1_API_KEY:
 MAX_TOKENS = int(os.getenv("MAX_TOKENS", "1024"))
 if not MAX_TOKENS:
     raise ValueError("MAX_TOKENS variable is not set in the .env file")
+
+WAVER_ADDRESS = os.getenv("WAVER_ADDRESS")
+if not WAVER_ADDRESS:
+    raise ValueError("WAVER_ADDRESS variable is not set in the .env file")
