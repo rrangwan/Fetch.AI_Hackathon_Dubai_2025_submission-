@@ -10,5 +10,13 @@ class InfluencerTTSRequest(Model):
     text: str
 
 class InfluencerTTSResponse(Model):
-    uuid: str = None
+    uid: str = None
     error: str = None
+
+class InfluencerPaymentRequest(Model):
+    uid: str
+
+class InfluencerPaymentResponse(Model):
+    link: str = None
+    error: str = None
+    
