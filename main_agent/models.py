@@ -6,9 +6,9 @@ class ASI1miniRequest(Model):
 class ASI1miniResponse(Model):
     response: str
 
-class InfluencerRequest(Model):
+class InfluencerTTSRequest(Model):
     text: str
 
-class InfluencerResponse(Model):
-    status: str
+class InfluencerTTSResponse(Model):
+    uuid: str = None
     error: str = None

@@ -10,7 +10,7 @@ HEADERS = {
     "Authorization": f"Bearer {ASI1_API_KEY}",
 }
 
-def asi1_ethical_check(
+def asi1_send_request(
     context: str,
     prompt: str,
     response_schema: dict[str, Any] | None = None,
@@ -38,16 +38,13 @@ def asi1_ethical_check(
             },
         }
 
-    try:
-        response = requests.post(
-            ASI1_URL,
-            headers=HEADERS,
-            data=json.dumps(payload),
-            timeout=60,
-        )
-        response.raise_for_status()
-        data = response.json()
-        # ASI1 returns choices[0].message.content (OpenAI-compatible)
-        return data["choices"][0]["message"]["content"]
-    except Exception as e:
-        return f"An error occurred: {e}"
+    response = requests.post(
+        ASI1_URL,
+        headers=HEADERS,
+        data=json.dumps(payload),
+        timeout=60,
+    )
+    response.raise_for_status()
+    data = response.json()
+    # ASI1 returns choices[0].message.content (OpenAI-compatible)
+    return data["choices"][0]["message"]["content"]
