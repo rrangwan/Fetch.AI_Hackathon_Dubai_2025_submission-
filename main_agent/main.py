@@ -1,6 +1,6 @@
 import uuid
 from database import DatabaseConnection
-from main_agent.waver import waver_generate_sound
+from waver import waver_generate_sound
 from request_fabric import make_celebrity_request, make_ethical_request
 from uagents import Agent, Context
 from uagents.setup import fund_agent_if_low
@@ -83,7 +83,7 @@ async def check_payment(ctx: Context, sender: str, message: InfluencerPaymentReq
         await ctx.send(sender, InfluencerPaymentResponse(error="500 Internal server error."))
         return
 
-    DatabaseConnection.remove_payment(ctx, uid)
+    database.remove_payment(ctx, uid)
 
     sound_link = None
     try:

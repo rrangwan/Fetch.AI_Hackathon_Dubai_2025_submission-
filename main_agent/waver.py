@@ -6,13 +6,20 @@ from env import WAVER_ADDRESS
 def waver_generate_sound(text: str) -> str:
 
     payload ={
-        "input_string": text,
+        "input_string": "Hello, everyone! This is a test message.",
+        
+    }
+
+    headers = {
+        "Content-Type": "application/json",
     }
 
     response = requests.post(
-        f"{WAVER_ADDRESS}/generate",
+        f"http://{WAVER_ADDRESS}/generate_wav",
         data=json.dumps(payload),
+        headers=headers,
         timeout=60,
+        stream=True
     )
     response.raise_for_status()
     data = response.json()
