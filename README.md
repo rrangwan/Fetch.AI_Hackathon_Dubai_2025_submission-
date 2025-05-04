@@ -96,10 +96,10 @@ Our project leverages Fetch.AI's agent framework to create a scalable and intera
 ## 🎬 Demo
 
 ### Video Demo
-[Link to your 5-minute demo video]
+[Link to demo video](https://github.com/rrangwan/Fetch.AI_Hackathon_Dubai_2025_submission-/blob/main/docs/demo.mp4)
 
 ### Screenshots
-[Include 2-3 screenshots showcasing your agent in action]
+[screenshots showcasing agent in action](https://github.com/rrangwan/Fetch.AI_Hackathon_Dubai_2025_submission-/blob/main/docs/screenshots.pdf)
 
 ## 💼 Business Potential
 
