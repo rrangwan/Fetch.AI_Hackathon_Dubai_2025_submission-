@@ -9,7 +9,7 @@
 
 **Agent Name:** CelebrityAi**
 
-**Agent Address:** [Your Agent Address on Agentverse]
+**Agent Address:** [test-agent://agent1qwcjyh288szzhny06d6th3j6qkauxeljp94ps5vhkxl8ej6dclg9kvq6lss]
 
 **Team Name:**  CelebrityAi
 
@@ -24,9 +24,10 @@ Celebrities face significant time constraints while managing their extensive fan
 Our agent, powered by Fetch.AI's technology, creates an authentic celebrity presence through advanced voice cloning. This AI-powered solution enables fans to interact with a highly accurate vocal representation of their favorite celebrities, providing personalized experiences at scale. The agent handles routine fan interactions, answers common questions, and delivers custom content in the celebrity's voice, allowing personalities to maintain a consistent presence across platforms without the time commitment typically required. This creates new revenue streams and engagement opportunities while preserving the celebrity's authentic connection with their audience.
 ## 🔧 Technical Architecture
 
-Our project leverages Fetch.AI's agent framework to create a scalable and interactive solution for celebrity-fan engagement. Below is a detailed breakdown of the technical implementation:
-
----
+Using a pretrained voice cloning *model created by Cambridge university, we made tweaks and hosted it on a server with API endpoints.  
+The user will enter text they wish to be said by their celebrity. The celebrity’s voice has already been cloned by the model.  
+A call is made to the Fetch ASI:One LLM, to verify the quality and validity of the user text. If approved, the user is charged 10 $FET, and the test message is sent via API to the model. The model then returns a link to a sound file hosted on the external server, from which the user can download and play the sound. 
+* https://huggingface.co/spaces/mrfakename/E2-F5-TTS 
 
 ### **🚀Agent Capabilities**
 - **Ethical Text Filtering**:
@@ -112,6 +113,7 @@ Our celebrity voice agent platform unlocks significant market opportunities with
 
 ### **Revenue Streams**
 - Subscription plans for celebrities based on interaction volume.
+- Sharing of royalties from musical content generation.
 - Premium fan experiences (e.g., personalized messages, custom content).
 - Sponsored interactions via brand partnerships.
 - White-label solutions for entertainment companies.
