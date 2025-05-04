@@ -67,6 +67,7 @@ influencer_protocol = Protocol(name="influencer_protocol", version="1.0")
 
 @tester.on_event("startup")
 async def startup(ctx: Context):
+
     ctx.logger.info(f"tester started. Address: {tester.address}")
     ctx.logger.info(f"Wallet address: {tester.wallet.address()}")
 
@@ -144,6 +145,8 @@ async def startup(ctx: Context):
     # This part is triggered by handle_transactai_response upon successful deposit confirmation
     # We call maybe_send_payment here just in case the confirmation message arrived *during* the wait loop
     await maybe_send_payment(ctx)
+    msg = EthicsRequest(text=TEXT)
+    asyncio.create_task(ctx.send(CELEBRITY_AI_ADDR, msg))
 
 
 @agent_proto.on_message(model=AgentMessage)
@@ -202,7 +205,7 @@ async def handle_transactai_response(ctx: Context, sender: str, msg: AgentMessag
 async def maybe_send_payment(ctx: Context):
     # Ensure deposit is confirmed and payment hasn't been attempted
     if ctx.storage.get(DEPOSIT_CONFIRMED_FLAG) is True and not ctx.storage.get(PAYMENT_ATTEMPTED_FLAG):
-        payment_amount = 100000000000000000 # Example amount (0.1 atestfet)
+        payment_amount = 1 # Example amount (0.1 atestfet)
         ctx.logger.info(f"Deposit confirmed, now attempting to pay {payment_amount} to Bob ({BOB_ADDRESS})...")
         ctx.storage.set(PAYMENT_ATTEMPTED_FLAG, True) # Mark as attempted
         payment_msg = create_metadata_message({
