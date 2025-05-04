@@ -1,25 +1,15 @@
 from uagents import Model
 
-class ASI1miniRequest(Model):
-    query: str
-
-class ASI1miniResponse(Model):
-    response: str
-
-class InfluencerTTSRequest(Model):
+class EthicsRequest(Model):
     text: str
 
-class InfluencerTTSResponse(Model):
+class EthicsResponse(Model):
     uid: str = None
     error: str = None
 
-class InfluencerPaymentRequest(Model):
+class PaymentRequest(Model):
     uid: str
 
-class InfluencerPaymentResponse(Model):
+class PaymentResponse(Model):
     link: str = None
     error: str = None
-    
-class Payment(Model):
-    uid: str
-    text: str

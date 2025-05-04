@@ -1,21 +1,24 @@
 
+import asyncio
 import time
-from uagents import Agent, Context
+from uagents import Agent, Context, Protocol
 
-from models import InfluencerPaymentRequest, InfluencerPaymentResponse, InfluencerTTSRequest, InfluencerTTSResponse
+from models import EthicsRequest, EthicsResponse, PaymentRequest, PaymentResponse
 
 agent_address = input("Enter the address of the influencer agent: ")
 text = input("Enter the message to send: ")
 
 tester = Agent(name="Tester.AI", port=5000, seed="1234", endpoint="http://localhost:5000/submit")
 
+influencer_protocol = Protocol(name="influencer_protocol", version="1.0")
+
 @tester.on_event("startup")
 async def send_message(ctx: Context):
-    msg = InfluencerTTSRequest(text=text)
-    await ctx.send(agent_address, msg)
+    msg = EthicsRequest(text=text)
+    asyncio.create_task(ctx.send(agent_address, msg))
 
-@tester.on_message(InfluencerTTSResponse)
-async def handle_response(ctx: Context, sender: str, message: InfluencerTTSResponse):
+@influencer_protocol.on_message(EthicsResponse)
+async def handle_response(ctx: Context, sender: str, message: EthicsResponse):
     if message.error:
         ctx.logger.info(f"Error from influencer agent: {message.error}")
         return
@@ -26,10 +29,10 @@ async def handle_response(ctx: Context, sender: str, message: InfluencerTTSRespo
     time.sleep(5)
 
     # Send payment request
-    await ctx.send(agent_address, InfluencerPaymentRequest(uid=uid))
+    await ctx.send(agent_address, PaymentRequest(uid=uid))
 
-@tester.on_message(InfluencerPaymentResponse)
-async def handle_payment_response(ctx: Context, sender: str, message: InfluencerPaymentResponse):
+@influencer_protocol.on_message(PaymentResponse)
+async def handle_payment_response(ctx: Context, sender: str, message: PaymentResponse):
     if message.error:
         ctx.logger.info(f"Error from influencer agent: {message.error}")
         return
@@ -37,5 +40,6 @@ async def handle_payment_response(ctx: Context, sender: str, message: Influencer
     link = message.link
     ctx.logger.info(f"Received payment link from influencer agent: {link}")
         
+tester.include(influencer_protocol)
 
 tester.run()

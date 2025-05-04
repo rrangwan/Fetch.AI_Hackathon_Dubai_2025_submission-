@@ -1,101 +1,97 @@
 import uuid
 from database import DatabaseConnection
+from models import EthicsRequest, EthicsResponse, PaymentRequest, PaymentResponse
 from waver import waver_generate_sound
 from request_fabric import make_celebrity_request, make_ethical_request
-from uagents import Agent, Context
+from uagents import Agent, Context, Protocol, Model
 from uagents.setup import fund_agent_if_low
 from env import SEED
-from models import InfluencerPaymentRequest, InfluencerPaymentResponse, InfluencerTTSRequest, InfluencerTTSResponse
 from asi1 import asi1_send_request
 
+# Initialize the database and agent
 database = DatabaseConnection()
 agent = Agent(name="Influencer.AI", seed=SEED, endpoint="http://localhost:8000/submit")
 fund_agent_if_low(agent.wallet.address())
 
-@agent.on_event("shutdown")
-async def shutdown(ctx: Context):
-    ctx.logger.info("Shutting down the agent.")
-    
+# Define the protocol
+influencer_protocol = Protocol(name="influencer_protocol", version="1.0")
 
-@agent.on_message(InfluencerTTSRequest)
-async def check_ethics(ctx: Context, sender: str, message: InfluencerTTSRequest):
-    ctx.logger.info(f"Forwarding to ASI:ONE: {message.text}")
+# Step 1: Handle Ethical Check
+@influencer_protocol.on_message(model=EthicsRequest, replies=EthicsResponse)
+async def handle_ethics_check(ctx: Context, sender: str, req: EthicsRequest):
+    ctx.logger.info(f"Received text for ethical check: {req.text}")
 
-    if len(message.text) == 0 or len(message.text) > 1000:
-        ctx.logger.info(f"Message is too long or empty: {message.text}")
-        await ctx.send(sender, InfluencerTTSResponse(error="400 Invalid arguments."))
+    if len(req.text) == 0 or len(req.text) > 1000:
+        ctx.logger.info(f"Message is too long or empty: {req.text}")
+        await ctx.send(sender, EthicsResponse(error="400 Invalid arguments."))
         return
 
-    text = message.text
     context, response_schema = make_ethical_request()
-
-    result = ""
     try:
-        result = asi1_send_request(context=context, prompt=text, response_schema=response_schema)
+        result = asi1_send_request(context=context, prompt=req.text, response_schema=response_schema)
     except Exception as e:
-        ctx.logger.error(f"Error while sending request to ASI1: {e}")
-        await ctx.send(sender, InfluencerTTSResponse(error="500 Internal server error."))
+        ctx.logger.error(f"Error during ethics check: {e}")
+        await ctx.send(sender, EthicsResponse(error="500 Internal server error."))
         return
 
-    ctx.logger.info(f"ASI1 Result: {result}")
     if result != "y":
-        ctx.logger.info(f"Message is unethical: {text}")
-        response = InfluencerTTSResponse(error="400 Invalid arguments.")
-        await ctx.send(sender, response)
+        ctx.logger.info(f"Message is unethical: {req.text}")
+        await ctx.send(sender, EthicsResponse(error="400 Text is unethical."))
         return
-    ctx.logger.info(f"Message is ethical: {text}")
 
     uid = str(uuid.uuid4())
-
     try:
-        database.set_payment(ctx, uid, text)
+        database.set_payment(ctx, uid, req.text)
     except Exception as e:
-        ctx.logger.error(f"Error while adding payment holder to database: {e}")
-        await ctx.send(sender, InfluencerTTSResponse(error="500 Internal server error."))
+        ctx.logger.error(f"Error while storing payment information: {e}")
+        await ctx.send(sender, EthicsResponse(error="500 Internal server error."))
         return
 
-    await ctx.send(sender, InfluencerTTSResponse(uid=uid))
+    await ctx.send(sender, EthicsResponse(uid=uid))
 
-@agent.on_message(InfluencerPaymentRequest)
-async def check_payment(ctx: Context, sender: str, message: InfluencerPaymentRequest):
-    ctx.logger.info(f"Checking payment for UID: {message.uid}")
-    text = None
+# Step 2: Handle Payment and Text Generation
+@influencer_protocol.on_message(model=PaymentRequest, replies=PaymentResponse)
+async def handle_payment_and_text_generation(ctx: Context, sender: str, req: PaymentRequest):
+    ctx.logger.info(f"Processing payment for UID: {req.uid}")
+
     try:
-        text = database.get_payment(ctx, message.uid)
+        text = database.get_payment(ctx, req.uid)
     except Exception as e:
-        ctx.logger.error(f"Error while getting payment from database: {e}")
-        await ctx.send(sender, InfluencerPaymentResponse(error="500 Internal server error."))
+        ctx.logger.error(f"Error while retrieving payment information: {e}")
+        await ctx.send(sender, PaymentResponse(error="500 Internal server error."))
         return
 
     if text is None:
-        ctx.logger.info(f"Payment not found for UID: {message.uid}")
-        await ctx.send(sender, InfluencerPaymentResponse(error="400 Invalid arguments."))
+        ctx.logger.info(f"No payment found for UID: {req.uid}")
+        await ctx.send(sender, PaymentResponse(error="400 Invalid arguments."))
         return
 
     context, response_schema = make_celebrity_request()
-    generatedText = ""
-    uid = message.uid
-
+    generated_text = None
     try:
-        generatedText = asi1_send_request(context=context, prompt=text, response_schema=response_schema)
+        generated_text = asi1_send_request(context=context, prompt=text, response_schema=response_schema)
     except Exception as e:
-        ctx.logger.error(f"Error while sending request to ASI1: {e}")
-        await ctx.send(sender, InfluencerPaymentResponse(error="500 Internal server error."))
+        ctx.logger.error(f"Error during text generation: {e}")
+        await ctx.send(sender, PaymentResponse(error="500 Internal server error."))
         return
 
-    database.remove_payment(ctx, uid)
-
-    ctx.logger.info(f"Generated text: {generatedText}")
-
-    sound_link = None
     try:
-        sound_link = waver_generate_sound(generatedText)
+        database.remove_payment(ctx, req.uid)
     except Exception as e:
-        ctx.logger.error(f"Error while sending generate sound request: {e}")
-        await ctx.send(sender, InfluencerPaymentResponse(error="500 Internal server error."))
+        ctx.logger.error(f"Error while removing payment information: {e}")
+        await ctx.send(sender, PaymentResponse(error="500 Internal server error."))
         return
 
-    await ctx.send(sender, InfluencerPaymentResponse(link=sound_link))
+    try:
+        sound_link = waver_generate_sound(generated_text)
+    except Exception as e:
+        ctx.logger.error(f"Error during voice generation: {e}")
+        await ctx.send(sender, PaymentResponse(error="500 Internal server error."))
+        return
 
-if __name__ == "__main__":
-    agent.run()
+    await ctx.send(sender, PaymentResponse(link=sound_link))
+
+# Include the protocol in the agent
+agent.include(influencer_protocol)
+
+agent.run()
