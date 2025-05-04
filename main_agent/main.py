@@ -85,6 +85,8 @@ async def check_payment(ctx: Context, sender: str, message: InfluencerPaymentReq
 
     database.remove_payment(ctx, uid)
 
+    ctx.logger.info(f"Generated text: {generatedText}")
+
     sound_link = None
     try:
         sound_link = waver_generate_sound(generatedText)

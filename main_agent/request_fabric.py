@@ -1,9 +1,8 @@
 def make_ethical_request():
     requirements = [
         "Behave as an ethical AI",
-        "Be strict as much as possible.",
         "Check is this message ethical or not",
-        "All bad words, hate speech, violence or sexual content, illegal activities are not ethical",
+        "All bad words, hate speech, violence or sexual content are not ethical",
         "No need to explain why",
         "No need to answer the questions",
         "Just return 'y' or 'n'",
@@ -31,7 +30,8 @@ def make_celebrity_request():
         "Avoid using your name in the message",
         "Avoid using emojis in the message",
         "Avoid using markdown and code blocks",
-        "It should be human readable"
+        "It should be human readable",
+        "Just one or two sentences",
     ]
     context = ". ".join(requirements)
     response_schema = {

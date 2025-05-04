@@ -6,8 +6,7 @@ from env import WAVER_ADDRESS
 def waver_generate_sound(text: str) -> str:
 
     payload ={
-        "input_string": "Hello, everyone! This is a test message.",
-        
+        "input_string": text,
     }
 
     headers = {
