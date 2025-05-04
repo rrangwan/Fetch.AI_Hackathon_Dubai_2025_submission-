@@ -5,13 +5,13 @@
 
 ## 📋 Project Overview
 
-**Project Name:**   celebrity.ai
+**Project Name: CelebrityAi**
 
-**Agent Name:** celebrity.ai
+**Agent Name:** CelebrityAi**
 
-<!-- **Agent Address:** [Your Agent Address on Agentverse] -->
+**Agent Address:** [Your Agent Address on Agentverse]
 
-**Team Name:**  celebrity.ai
+**Team Name:**  CelebrityAi
 
 **Track:** [Creator Economy Track / ASI-1 Mini Challenge / Other]
 
@@ -24,11 +24,9 @@ Celebrities face significant time constraints while managing their extensive fan
 Our agent, powered by Fetch.AI's technology, creates an authentic celebrity presence through advanced voice cloning. This AI-powered solution enables fans to interact with a highly accurate vocal representation of their favorite celebrities, providing personalized experiences at scale. The agent handles routine fan interactions, answers common questions, and delivers custom content in the celebrity's voice, allowing personalities to maintain a consistent presence across platforms without the time commitment typically required. This creates new revenue streams and engagement opportunities while preserving the celebrity's authentic connection with their audience.
 ## 🔧 Technical Architecture
 
-[Describe your technical implementation with a focus on:
-- Agent capabilities
-- Key components
-- Integration with Fetch.AI ecosystem
-- Technologies used]
+Our project leverages Fetch.AI's agent framework to create a scalable and interactive solution for celebrity-fan engagement. Below is a detailed breakdown of the technical implementation:
+
+---
 
 ### **🚀Agent Capabilities**
 - **Ethical Text Filtering**:
@@ -51,15 +49,14 @@ Our agent, powered by Fetch.AI's technology, creates an authentic celebrity pres
 ```
 - Python 3.12+
 - 
-- 
 ```
 
 ### Installation Steps
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/[your-username]/[your-repo-name].git
-   cd [your-repo-name]
+   git clone https://github.com/rrangwan/Fetch.AI_Hackathon_Dubai_2025_submission-.git
+   cd Fetch.AI_Hackathon_Dubai_2025_submission-
    ```
 
 2. Install dependencies
@@ -136,9 +133,9 @@ Our celebrity voice agent platform unlocks significant market opportunities with
 
 ## 📚 Additional Documentation
 
-- [Link to your project presentation/pitch deck]
-- [Link to one-page project summary]
-- [Any additional documentation]
+- [ Link to your project presentation/pitch deck](https://github.com/rrangwan/Fetch.AI_Hackathon_Dubai_2025_submission-/blob/main/docs/CelebrityAI.pdf)
+- [Link to one-page project summary](https://github.com/rrangwan/Fetch.AI_Hackathon_Dubai_2025_submission-/blob/main/docs/CelebrityAI.pptx)
+- [Summary](https://github.com/rrangwan/Fetch.AI_Hackathon_Dubai_2025_submission-/blob/main/docs/summary.pdf)
 
 ## 📊 Track-Specific Information
 
