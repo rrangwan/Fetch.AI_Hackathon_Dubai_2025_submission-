@@ -7,7 +7,7 @@
 
 **Project Name: CelebrityAi**
 
-**Agent Name:** CelebrityAi**
+**Agent Name: CelebrityAi**
 
 **Agent Address:** [agent1qwcjyh288szzhny06d6th3j6qkauxeljp94ps5vhkxl8ej6dclg9kvq6lss]
 
